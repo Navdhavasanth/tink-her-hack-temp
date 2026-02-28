@@ -13,7 +13,7 @@
 - Member 2: Manjima N - College Of Engineering Thalassery
 
 ### Hosted Project Link
-[mention your project hosted link here]
+https://navdhavasanth.github.io/tink-her-hack-temp/
 
 ### Project Description
 The Smart Medicine Box is an IoT-enabled device that helps patients adhere to their medication schedules using automated audio-visual alarms. It utilizes physical push buttons for the user to manually confirm when a dose is taken, logging the activity to track compliance. If a patient misses a scheduled dose, the system automatically sends a mobile alert to their caregiver, ensuring peace of mind and better health management.
