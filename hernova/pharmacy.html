@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Refill</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 p-6">
+    <div class="max-w-md mx-auto">
+        <a href="index.html" class="text-green-700 font-bold hover:underline">← BACK TO DASHBOARD</a>
+        
+        <div class="bg-white p-8 rounded-2xl shadow-xl mt-6 border-t-8 border-green-600">
+            <h1 id="pName" class="text-2xl font-bold text-gray-800 mb-6 text-center underline decoration-green-200">Pharmacy Control</h1>
+
+            <div class="bg-green-100 p-6 rounded-xl text-center mb-8">
+                <span class="text-sm text-green-700 font-bold uppercase block mb-1">Current Stock</span>
+                <span id="pillCount" class="text-6xl font-black text-green-800 tracking-tighter">20</span>
+            </div>
+
+            <div class="space-y-8">
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Daily Update (+ or -)</label>
+                    <div class="flex gap-2">
+                        <input id="refillQty" type="number" placeholder="e.g. -1" class="w-full border-2 border-gray-200 p-3 rounded-lg outline-none focus:border-green-500">
+                        <button onclick="updatePills()" class="bg-green-600 text-white px-4 rounded-lg font-bold hover:bg-green-700 text-sm">UPDATE</button>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Set New Total (Direct Save)</label>
+                    <div class="flex gap-2">
+                        <input id="directQty" type="number" placeholder="e.g. 50" class="w-full border-2 border-gray-200 p-3 rounded-lg outline-none focus:border-blue-500">
+                        <button onclick="saveDirect()" class="bg-blue-600 text-white px-4 rounded-lg font-bold hover:bg-blue-700 text-sm uppercase">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const patientId = urlParams.get('id');
+
+        window.onload = function() {
+            const patients = JSON.parse(localStorage.getItem('myPatients')) || [];
+            const patient = patients.find(p => p.id == patientId);
+            if (patient) {
+                document.getElementById('pName').innerText = patient.name;
+                if (patient.pills !== undefined) {
+                    document.getElementById('pillCount').innerText = patient.pills;
+                }
+            }
+        };
+
+        // This handles addition/subtraction (Relative Change)
+        function updatePills() {
+            const input = document.getElementById('refillQty');
+            const display = document.getElementById('pillCount');
+            let currentTotal = parseInt(display.innerText);
+            let changeValue = parseInt(input.value);
+
+            if (isNaN(changeValue)) return alert("Please enter a number to update!");
+
+            let newTotal = currentTotal + changeValue;
+            if (newTotal < 0) newTotal = 0;
+
+            processStorage(newTotal);
+            input.value = '';
+        }
+
+        // This handles setting the exact number (Direct Change)
+        function saveDirect() {
+            const input = document.getElementById('directQty');
+            let exactTotal = parseInt(input.value);
+
+            if (isNaN(exactTotal)) return alert("Please enter a total number to save!");
+            if (exactTotal < 0) exactTotal = 0;
+
+            processStorage(exactTotal);
+            input.value = '';
+        }
+
+        // Shared function to save data to LocalStorage
+        function processStorage(value) {
+            let patients = JSON.parse(localStorage.getItem('myPatients'));
+            const index = patients.findIndex(p => p.id == patientId);
+            
+            patients[index].pills = value;
+            localStorage.setItem('myPatients', JSON.stringify(patients));
+
+            document.getElementById('pillCount').innerText = value;
+            alert("Inventory updated to " + value + " pills!");
+        }
+    </script>
+</body>
+</html>

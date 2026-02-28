@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medication History | Caretaker Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: radial-gradient(at top left, #f8fafc, #f1f5f9);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -21px;
+            top: 24px;
+            width: 2px;
+            height: 100%;
+            background: #e2e8f0;
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-2xl mx-auto">
+        <a href="index.html" class="inline-flex items-center text-slate-500 font-bold hover:text-blue-600 transition-colors mb-8 group">
+            <span class="mr-2 group-hover:-translate-x-1 transition-transform">←</span> BACK TO DASHBOARD
+        </a>
+        
+        <div class="glass-card rounded-[2.5rem] shadow-2xl shadow-slate-200 overflow-hidden border border-white">
+            <div class="bg-slate-900 p-8 text-white relative overflow-hidden">
+                <div class="relative z-10">
+                    <h1 id="pName" class="text-3xl font-black mb-1">Patient Log</h1>
+                    <p class="text-slate-400 text-sm font-medium tracking-wide uppercase">Medication Adherence History</p>
+                </div>
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/20 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+            </div>
+
+            <div class="p-8">
+                <div class="grid grid-cols-2 gap-4 mb-10">
+                    <div class="bg-emerald-50 p-4 rounded-3xl border border-emerald-100 text-center">
+                        <p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Total Taken</p>
+                        <p id="countTaken" class="text-2xl font-black text-emerald-700">0</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-3xl border border-red-100 text-center">
+                        <p class="text-[10px] font-black text-red-600 uppercase tracking-widest">Total Missed</p>
+                        <p id="countMissed" class="text-2xl font-black text-red-700">0</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-[2rem] mb-10 border border-slate-100">
+                    <h3 class="font-bold text-slate-800 text-sm mb-4 flex items-center">
+                        <span class="bg-blue-600 w-2 h-2 rounded-full mr-2"></span> Add New Entry
+                    </h3>
+                    <div class="space-y-3">
+                        <input id="medName" type="text" placeholder="Medicine Name (e.g. Aspirin)" 
+                            class="w-full bg-white border-2 border-slate-100 p-4 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all font-semibold">
+                        
+                        <select id="medStatus" class="w-full bg-white border-2 border-slate-100 p-4 rounded-2xl focus:border-blue-500 outline-none transition-all font-bold text-slate-700">
+                            <option value="Taken">✅ Mark as Taken</option>
+                            <option value="Missed">❌ Mark as Missed</option>
+                        </select>
+                        
+                        <button onclick="addLog()" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all active:scale-[0.98]">
+                            SAVE LOG ENTRY
+                        </button>
+                    </div>
+                </div>
+
+                <h3 class="font-black text-slate-400 text-xs uppercase tracking-[0.2em] mb-6 ml-1">Recent Activity</h3>
+                <div class="ml-5 space-y-0" id="logContainer">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const patientId = urlParams.get('id');
+
+        window.onload = function() {
+            const patients = JSON.parse(localStorage.getItem('myPatients')) || [];
+            const patient = patients.find(p => p.id == patientId);
+
+            if (patient) {
+                document.getElementById('pName').innerText = patient.name + "'s History";
+                displayLogs();
+            } else {
+                document.getElementById('pName').innerText = "Record Not Found";
+            }
+        };
+
+        function addLog() {
+            const medName = document.getElementById('medName').value;
+            const medStatus = document.getElementById('medStatus').value;
+            
+            if(!medName) return alert("Please enter a medicine name.");
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const dateString = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+            const newLog = { med: medName, status: medStatus, time: timeString, date: dateString };
+
+            let patients = JSON.parse(localStorage.getItem('myPatients'));
+            const patientIndex = patients.findIndex(p => p.id == patientId);
+            
+            if(!patients[patientIndex].logs) {
+                patients[patientIndex].logs = [];
+            }
+            
+            patients[patientIndex].logs.unshift(newLog); 
+            localStorage.setItem('myPatients', JSON.stringify(patients));
+
+            document.getElementById('medName').value = ''; 
+            displayLogs();
+        }
+
+        function displayLogs() {
+            const patients = JSON.parse(localStorage.getItem('myPatients'));
+            const patient = patients.find(p => p.id == patientId);
+            const container = document.getElementById('logContainer');
+            
+            let takenCount = 0;
+            let missedCount = 0;
+            
+            container.innerHTML = '';
+
+            if(!patient.logs || patient.logs.length === 0) {
+                container.innerHTML = '<p class="text-sm text-slate-400 italic py-10 text-center">No records available for this patient.</p>';
+                return;
+            }
+
+            patient.logs.forEach(log => {
+                const isTaken = log.status === 'Taken';
+                if(isTaken) takenCount++; else missedCount++;
+                
+                const themeColor = isTaken ? 'emerald' : 'red';
+                const icon = isTaken ? '✓' : '✕';
+
+                container.innerHTML += `
+                    <div class="timeline-item relative pl-8 pb-8 transition-all hover:translate-x-1">
+                        <div class="absolute left-[-11px] top-1 w-6 h-6 rounded-full bg-white border-4 border-${themeColor}-500 shadow-sm z-10 flex items-center justify-center">
+                             <span class="text-[10px] font-black text-${themeColor}-600">${icon}</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center p-5 bg-white border border-slate-100 rounded-[1.5rem] shadow-sm">
+                            <div>
+                                <p class="font-extrabold text-slate-800 text-lg">${log.med}</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">${log.date} • ${log.time}</p>
+                            </div>
+                            <span class="text-${themeColor}-600 font-black text-[10px] uppercase tracking-widest bg-${themeColor}-50 px-4 py-2 rounded-full border border-${themeColor}-100">
+                                ${log.status}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('countTaken').innerText = takenCount;
+            document.getElementById('countMissed').innerText = missedCount;
+        }
+    </script>
+</body>
+</html>
