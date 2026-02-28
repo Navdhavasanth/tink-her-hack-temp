@@ -2,7 +2,7 @@
   <img src="./img.png" alt="Project Banner" width="100%">
 </p>
 
-# Smart Medicine Bo
+# Smart Medicine Box
 
 ## Basic Details
 
