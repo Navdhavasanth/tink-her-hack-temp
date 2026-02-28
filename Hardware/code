@@ -1,0 +1,103 @@
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <base64.h>
+
+// ================= WIFI & TWILIO CREDENTIALS =================
+const char* ssid = "Manjima";
+const char* password = "12345678";
+
+const char* account_sid = "AC67c860d1dd40f1c2a7e26f30fd408b21";
+const char* auth_token  = "4221a19076ff0a8f7f3e1afcce097abd"; 
+const char* from_number = "+14476662591";
+const char* to_number   = "+919037658024";
+
+// ================= PINS =================
+const int greenLED = 18;
+const int redLED   = 19;
+const int buzzer   = 23;
+const int buttonPin = 4;
+
+// ================= VARIABLES =================
+unsigned long lastTriggerTime = 0;
+const unsigned long triggerInterval = 5000; // Decreased to 5s for rapid testing
+bool alarmActive = false;
+unsigned long alarmStartTime = 0;
+const unsigned long timeoutPeriod = 30000; 
+
+// ================= TWILIO FUNCTION (MODIFIED) =================
+// Now accepts a message string as an input
+void sendTwilioSMS(String message) {
+  if(WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    String url = "https://api.twilio.com/2010-04-01/Accounts/" + String(account_sid) + "/Messages.json";
+    http.begin(url);
+    
+    String auth = String(account_sid) + ":" + String(auth_token);
+    http.addHeader("Authorization", "Basic " + base64::encode(auth));
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+    String postBody = "To=" + String(to_number) + "&From=" + String(from_number) + "&Body=" + message;
+    
+    int httpCode = http.POST(postBody);
+    Serial.printf("[Twilio] Response: %d\n", httpCode);
+    http.end();
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(greenLED, OUTPUT);
+  pinMode(redLED, OUTPUT);
+  pinMode(buzzer, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP); // Button connected to GND and Pin 4
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500); Serial.print(".");
+  }
+  Serial.println("\nWiFi Connected!");
+}
+
+void loop() {
+  // ===== AUTO TRIGGER (Starts the alarm every 5 seconds) =====
+  if (!alarmActive && (millis() - lastTriggerTime >= triggerInterval)) {
+    alarmActive = true;
+    alarmStartTime = millis();
+    lastTriggerTime = millis();
+    Serial.println("ALARM TRIGGERED - Waiting for patient...");
+  }
+
+  if (alarmActive) {
+    // Alert the patient with Red LED and Buzzer
+    digitalWrite(redLED, (millis() / 500) % 2 == 0);
+    digitalWrite(buzzer, (millis() / 500) % 2 == 0);
+
+    // ===== BUTTON PRESSED (Patient took the pill) =====
+    // In INPUT_PULLUP mode, LOW means the button is pushed
+    if (digitalRead(buttonPin) == LOW) {
+      delay(50); // Debounce
+      Serial.println("Success: Pill Taken! Sending SMS...");
+      
+      sendTwilioSMS("The patient has taken the pill. All good!"); // Send SUCCESS message
+      
+      alarmActive = false;
+      digitalWrite(redLED, LOW);
+      digitalWrite(buzzer, LOW);
+      digitalWrite(greenLED, HIGH); // Turn on Green LED for 2 seconds
+      delay(2000);
+      digitalWrite(greenLED, LOW);
+    }
+
+    // ===== TIMEOUT (Patient forgot) =====
+    if (millis() - alarmStartTime > timeoutPeriod) {
+      Serial.println("Timeout: Pill NOT taken! Sending SMS...");
+      
+      sendTwilioSMS("ALERT: Pill was NOT taken! Please check on the patient."); // Send FAILURE message
+      
+      alarmActive = false;
+      digitalWrite(redLED, LOW);
+      digitalWrite(buzzer, LOW);
+    }
+  }
+}
