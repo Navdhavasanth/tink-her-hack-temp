@@ -2,54 +2,69 @@
   <img src="./img.png" alt="Project Banner" width="100%">
 </p>
 
-# [Project Name] 🎯
+# Smart Medicine Box
 
 ## Basic Details
 
-### Team Name: [Name]
+### Team Name: HerNova
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
+- Member 1: Navdha Vasanth - College Of Engineering Thalassery
+- Member 2: Manjima N - College Of Engineering Thalassery
 
 ### Hosted Project Link
 [mention your project hosted link here]
 
 ### Project Description
-[2-3 lines about what your project does]
+The Smart Medicine Box is an IoT-enabled device that helps patients adhere to their medication schedules using automated audio-visual alarms. It utilizes physical push buttons for the user to manually confirm when a dose is taken, logging the activity to track compliance. If a patient misses a scheduled dose, the system automatically sends a mobile alert to their caregiver, ensuring peace of mind and better health management.
 
 ### The Problem statement
-[What problem are you solving?]
+Medication non-adherence—forgetting to take pills or taking the wrong dose—is a leading cause of hospitalizations and reduced quality of life, particularly for the elderly and those with chronic illnesses. Existing pill organizers are passive and cannot alert a caregiver if a dose is missed, leaving a dangerous gap in home-based healthcare monitoring.
 
 ### The Solution
-[How are you solving it?]
+The Smart Medicine Box provides an active monitoring system that automates the dosing process. By integrating a Real-Time Clock (RTC) with an ESP32/Arduino, the box triggers loud buzzers and flashing LEDs at exact prescribed times. Unlike traditional boxes, it requires the user to press a physical confirmation button after taking their pills, which stops the alarm and logs the event. If the button isn't pressed within a set window, the system automatically sends a remote notification to a caregiver’s phone, ensuring immediate intervention if a dose is missed.
 
----
 
 ## Technical Details
 
 ### Technologies/Components Used
 
 **For Software:**
-- Languages used: [e.g., JavaScript, Python, Java]
-- Frameworks used: [e.g., React, Django, Spring Boot]
-- Libraries used: [e.g., axios, pandas, JUnit]
-- Tools used: [e.g., VS Code, Git, Docker]
+-Languages used: C++ (Arduino Framework), JSON (for API/WiFi configuration).
+-Frameworks used: Arduino Core for ESP32/Arduino.
+-Libraries used: * RTClib.h (to interface with the DS3231 clock).
+-LiquidCrystal_I2C.h (for the LCD display).
+    -WiFi.h & HTTPClient.h (for sending notifications to the caregiver).
+    -EzButton.h (optional, but great for handling button debouncing).
+-Tools used: Arduino IDE or VS Code (with PlatformIO), Serial Monitor (for debugging), and Fritzing (for circuit design).
 
 **For Hardware:**
-- Main components: [List main components]
-- Specifications: [Technical specifications]
-- Tools required: [List tools needed]
+Main Components:
+-Microcontroller: ESP32 DevKit V1 (chosen for built-in Wi-Fi) or Arduino Nano.
+-Real-Time Clock: DS3231 RTC Module (includes a coin cell battery for time backup).
+-Display: 16x2 I2C LCD Screen (to show the current time and "Take Meds" messages).
+-Input: Momentary Push Buttons (to confirm medication intake).
+-Alerts: 5V Active Buzzer and 5mm High-Brightness LEDs (Red/Green).
+-Power: 9V Battery or a 5V Micro-USB power adapter.
+
+Specifications:
+-Input Voltage: 5V – 9V DC.
+-Communication: I2C Protocol (shared by LCD and RTC to save pins).
+-Button Logic: Active-LOW (using internal pull-up resistors).
+-Connectivity: 2.4GHz Wi-Fi (for IoT alerts).
+
+Tools Required:
+-Soldering Iron & Solder: To secure connections on a perf-board or PCB.
+-Breadboard & Jumper Wires: For initial prototyping and testing the button logic.
+-Multimeter: To check continuity and ensure the buttons are triggering correctly.
+-Hot Glue Gun / Small Screws: To mount the buttons and electronics inside your box enclosure.
+-Wire Strippers: For preparing the leads to the buttons and LEDs.
 
 ---
 
 ## Features
 
-List the key features of your project:
-- Feature 1: [Description]
-- Feature 2: [Description]
-- Feature 3: [Description]
-- Feature 4: [Description]
+
 
 ---
 
