@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Emergency Contact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-red-50 p-6">
+    <div class="max-w-md mx-auto">
+        <a href="index.html" class="text-red-700 font-bold hover:underline">← DASHBOARD</a>
+        <div class="bg-white p-8 rounded-2xl shadow-xl mt-6 border-t-8 border-red-600">
+            <h1 id="pName" class="text-3xl font-black text-center text-gray-800 mb-6">...</h1>
+
+            <div class="space-y-4">
+                <div class="text-center bg-gray-50 p-4 rounded-lg border">
+                    <p class="text-xs text-gray-500 uppercase font-bold">Assigned Doctor</p>
+                    <p id="docNameDisplay" class="text-xl font-bold text-blue-800 italic">No Doctor Found</p>
+                </div>
+
+                <a id="docCallBtn" href="#" class="block w-full bg-red-600 text-white text-center py-5 rounded-xl font-bold text-xl shadow-lg">
+                    📞 CALL DOCTOR
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const patientId = urlParams.get('id');
+            const patients = JSON.parse(localStorage.getItem('myPatients')) || [];
+            const patient = patients.find(p => p.id == patientId);
+
+            // DEBUG: This will show you the data in the browser console (F12)
+            console.log("Current Patient Data:", patient);
+
+            if (patient) {
+                document.getElementById('pName').innerText = patient.name;
+                
+                // If the data exists, show it. If not, show the error.
+                if (patient.docName && patient.docName !== "") {
+                    document.getElementById('docNameDisplay').innerText = "Dr. " + patient.docName;
+                    document.getElementById('docNameDisplay').classList.remove('italic', 'text-gray-400');
+                } else {
+                    document.getElementById('docNameDisplay').innerText = "Name not saved in Dashboard";
+                }
+
+                if (patient.docPhone) {
+                    document.getElementById('docCallBtn').href = "tel:" + patient.docPhone;
+                    document.getElementById('docCallBtn').innerText = "📞 CALL " + patient.docPhone;
+                }
+            }
+        };
+    </script>
+</body>
+</html>

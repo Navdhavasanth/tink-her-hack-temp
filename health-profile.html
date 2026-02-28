@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Health Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(at top left, #f8fafc, #e2e8f0);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .input-focus:focus {
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <div class="flex items-center justify-between mb-10">
+            <a href="index.html" class="group flex items-center text-slate-500 hover:text-blue-600 transition-all font-semibold">
+                <div class="bg-white p-2 rounded-xl shadow-sm mr-3 group-hover:shadow-md transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </div>
+                DASHBOARD
+            </a>
+            <div id="lastUpdatedTag" class="text-[10px] bg-white/50 border border-white px-3 py-1 rounded-full text-slate-400 font-bold uppercase tracking-widest shadow-sm">
+                Last Sync: <span id="lastUpdated">Never</span>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-[3rem] shadow-2xl shadow-blue-900/5 overflow-hidden border border-white">
+            <div class="relative bg-gradient-to-br from-blue-700 to-indigo-800 p-8 md:p-12 text-white">
+                <div class="relative z-10">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                        <div>
+                            <span class="bg-blue-400/30 text-blue-100 text-[10px] font-black px-3 py-1 rounded-md uppercase tracking-wider mb-3 inline-block">Medical Profile</span>
+                            <h1 id="displayName" class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">Loading...</h1>
+                            <div class="flex items-center text-blue-100/80">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <p id="displayCondition" class="font-medium text-sm md:text-base italic">Please wait...</p>
+                            </div>
+                        </div>
+                        <div class="flex -space-x-2">
+                            <div class="h-12 w-12 rounded-full border-4 border-blue-600 bg-blue-500 flex items-center justify-center font-bold text-lg shadow-lg">?</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute top-0 right-0 -mr-20 -mt-20 h-64 w-64 bg-white/10 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 -ml-10 -mb-10 h-32 w-32 bg-blue-400/20 rounded-full blur-2xl"></div>
+            </div>
+
+            <div class="p-8 md:p-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+                
+                <div class="lg:col-span-2 space-y-10">
+                    <section>
+                        <div class="flex items-center mb-6">
+                            <div class="h-8 w-1 bg-blue-500 rounded-full mr-4"></div>
+                            <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Biometric Vitals</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="group">
+                                <label class="flex items-center text-xs font-bold text-slate-500 mb-3 ml-1 group-focus-within:text-blue-600 transition-colors">
+                                    <span class="mr-2">🩸</span> BLOOD SUGAR (mg/dL)
+                                </label>
+                                <input id="sugar" type="number" placeholder="000" 
+                                    class="w-full bg-slate-100/50 border-2 border-transparent p-5 rounded-3xl text-xl font-bold text-slate-700 focus:bg-white focus:border-blue-500 outline-none transition-all input-focus">
+                            </div>
+                            <div class="group">
+                                <label class="flex items-center text-xs font-bold text-slate-500 mb-3 ml-1 group-focus-within:text-blue-600 transition-colors">
+                                    <span class="mr-2">🫀</span> BLOOD PRESSURE
+                                </label>
+                                <input id="bp" type="text" placeholder="120/80" 
+                                    class="w-full bg-slate-100/50 border-2 border-transparent p-5 rounded-3xl text-xl font-bold text-slate-700 focus:bg-white focus:border-blue-500 outline-none transition-all input-focus">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div class="flex items-center mb-6">
+                            <div class="h-8 w-1 bg-indigo-500 rounded-full mr-4"></div>
+                            <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Clinical Observations</h2>
+                        </div>
+                        <textarea id="doctorNotes" rows="5" placeholder="Document any significant changes in mood, appetite, or physical symptoms..." 
+                            class="w-full bg-slate-100/50 border-2 border-transparent p-6 rounded-[2rem] text-slate-700 font-medium focus:bg-white focus:border-indigo-500 outline-none transition-all input-focus"></textarea>
+                    </section>
+                </div>
+
+                <div class="space-y-10">
+                    <section class="bg-slate-50 p-8 rounded-[2.5rem] border border-slate-200/60">
+                        <div class="flex items-center mb-6">
+                            <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Scheduling</h2>
+                        </div>
+                        <div class="space-y-4">
+                            <label class="block text-[10px] font-bold text-slate-500 ml-1">NEXT DOCTOR VISIT</label>
+                            <input id="nextVisit" type="date" 
+                                class="w-full bg-white border-2 border-slate-200 p-4 rounded-2xl font-bold text-slate-700 focus:border-blue-500 outline-none transition-all">
+                            <div class="bg-blue-50 p-4 rounded-2xl mt-4">
+                                <p class="text-[10px] text-blue-600 font-bold uppercase leading-tight">Pro-Tip:</p>
+                                <p class="text-xs text-blue-800/70 mt-1 leading-relaxed">Early detection of sugar spikes can prevent emergency visits.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <button onclick="saveHealthData()" 
+                        class="group relative w-full bg-slate-900 overflow-hidden text-white font-extrabold py-6 rounded-[2rem] hover:bg-blue-600 shadow-2xl shadow-blue-900/20 transition-all active:scale-[0.95]">
+                        <span class="relative z-10 flex items-center justify-center">
+                            UPDATE RECORDS
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-12 text-center">
+            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em]">Secure Clinical Environment • 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const patientId = urlParams.get('id');
+
+        window.onload = function() {
+            const patients = JSON.parse(localStorage.getItem('myPatients')) || [];
+            const patient = patients.find(p => p.id == patientId);
+
+            if (patient) {
+                document.getElementById('displayName').innerText = patient.name;
+                document.getElementById('displayCondition').innerText = patient.condition;
+                
+                // Add initial to the profile circle
+                const initials = patient.name.split(' ').map(n => n[0]).join('');
+                document.querySelector('.h-12.w-12').innerText = initials;
+
+                if(patient.health) {
+                    document.getElementById('sugar').value = patient.health.sugar || '';
+                    document.getElementById('bp').value = patient.health.bp || '';
+                    document.getElementById('nextVisit').value = patient.health.nextVisit || '';
+                    document.getElementById('doctorNotes').value = patient.health.doctorNotes || '';
+                    document.getElementById('lastUpdated').innerText = patient.health.lastUpdate || "Ready";
+                }
+            } else {
+                window.location.href = "index.html";
+            }
+        };
+
+        function saveHealthData() {
+            let patients = JSON.parse(localStorage.getItem('myPatients'));
+            const index = patients.findIndex(p => p.id == patientId);
+
+            const sugarLevel = document.getElementById('sugar').value;
+            const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            if (sugarLevel > 200) {
+                alert("🚨 CRITICAL: High Blood Sugar detected!");
+            }
+
+            patients[index].health = {
+                sugar: sugarLevel,
+                bp: document.getElementById('bp').value,
+                nextVisit: document.getElementById('nextVisit').value,
+                doctorNotes: document.getElementById('doctorNotes').value,
+                lastUpdate: now
+            };
+
+            localStorage.setItem('myPatients', JSON.stringify(patients));
+            document.getElementById('lastUpdated').innerText = now;
+            
+            // Visual feedback on button
+            const btn = document.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "✅ SAVED SUCCESSFULLY";
+            btn.classList.add('bg-green-600');
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('bg-green-600');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
