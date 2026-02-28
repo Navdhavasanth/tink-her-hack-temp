@@ -117,7 +117,8 @@ Tools Required:
 
 **System Architecture:**
 
-![Architecture Diagram](docs/architecture.png)
+![WhatsApp Image 2026-02-28 at 10 56 12 AM](https://github.com/user-attachments/assets/911079b5-f32a-453a-8945-54edb85f4ead)
+
 *Explain your system architecture - components, data flow, tech stack interaction*
 
 **Application Workflow:**
