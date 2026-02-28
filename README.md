@@ -64,33 +64,41 @@ Tools Required:
 
 ## Features
 
-
-
----
+-Precise Scheduling: High-accuracy RTC module ensures alarms go off at the exact time.
+-Audio-Visual Alerts: Loud buzzer and flashing LEDs catch the user's attention.
+-Physical Confirmation: Push button requires the user to interact with the box to stop the alarm.
+-Remote Caregiver Alerts: Wi-Fi notifications are sent if a dose is not confirmed within a set time.
 
 ## Implementation
 
 ### For Software:
 
-#### Installation
-```bash
-[Installation commands - e.g., npm install, pip install -r requirements.txt]
-```
-
-#### Run
-```bash
-[Run commands - e.g., npm start, python app.py]
-```
+-Time Sync: Initialize the RTC module via the RTClib library to set the current time during the first run.
+-Alarm Loop: Run a continuous loop() that compares the current time from the RTC to the scheduled alarm times stored in the code.
+-Button Interrupts: Program the buttons to trigger an Interrupt Service Routine (ISR). This immediately stops the buzzer and LEDs when pressed.
+-IoT Notification Logic: If the current time exceeds an alarm time by 30 minutes without a button press, trigger a HTTP POST request to a service like IFTTT to send a notification
 
 ### For Hardware:
 
 #### Components Required
-[List all components needed with specifications]
+
+-Microcontroller: ESP32 DevKit V1 (Wi-Fi capable) or Arduino Nano.
+-RTC Module: DS3231 (for accurate timekeeping with coin cell backup).
+-Input: 7x Momentary Push Buttons (Tactile switches for 7 days).
+-Output: 1x 5V Active Buzzer, 7x LEDs (5mm, Green).
+-Display: 16x2 I2C LCD Module.
+-Prototyping: Breadboard, Jumper Wires (Male-to-Female/Male-to-Male), Resistors (220$\Omega$ for LEDs).
 
 #### Circuit Setup
-[Explain how to set up the circuit]
 
----
+-I2C Devices: Connect the LCD and RTC modules to the ESP32 using the I2C protocol:
+  -VCC to 3.3V/5V.
+  -GND to GND.
+  -SDA to GPIO 21.
+  -SCL to GPIO 22.
+-Push Buttons: Connect one pin of each button to a unique GPIO pin (e.g., GPIO 13, 14, 25, 26, 27, 32, 33) and the other pin to GND.
+-Alerts: Connect the Buzzer positive pin to a GPIO pin (e.g., GPIO 18) and negative to GND. Connect LEDs through 220$\Omega$ resistors to their respective GPIO pins.
+-Power: Connect the main power source to the USB port or the VIN pin (if using 5V).
 
 ## Project Documentation
 
