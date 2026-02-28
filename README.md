@@ -122,7 +122,8 @@ Tools Required:
 
 **Application Workflow:**
 
-![Workflow](docs/workflow.png)
+<img width="572" height="1908" alt="medflowdia drawio" src="https://github.com/user-attachments/assets/b7172410-fb1e-4489-9a7f-e7b4d79da503" />
+
 *Add caption explaining your workflow*
 
 ---
