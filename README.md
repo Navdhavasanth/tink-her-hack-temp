@@ -6,7 +6,7 @@
 
 ## Basic Details
 
-### Team Name: HerNov
+### Team Name: HerNova
 
 ### Team Members
 - Member 1: Navdha Vasanth - College Of Engineering Thalassery
