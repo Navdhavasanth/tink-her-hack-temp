@@ -104,16 +104,14 @@ Tools Required:
 
 ### For Software:
 
-#### Screenshots (Add at least 3)
+#### Screenshots 
+<img width="1913" height="913" alt="Screenshot 2026-02-28 081853" src="https://github.com/user-attachments/assets/a26c5c2d-bace-4efe-93bc-7b78f49cf644" />
 
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+<img width="1914" height="906" alt="Screenshot 2026-02-28 081939" src="https://github.com/user-attachments/assets/f77fefb3-9c1d-4876-b685-64fdad474ab6" />
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+<img width="1919" height="904" alt="Screenshot 2026-02-28 082037" src="https://github.com/user-attachments/assets/73636f5c-6554-4dab-9aa1-2e1ac634cb38" />
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+<img width="1919" height="904" alt="Screenshot 2026-02-28 082213" src="https://github.com/user-attachments/assets/0a8f0779-a685-4c77-b2ee-5a89595cf171" />
 
 #### Diagrams
 
