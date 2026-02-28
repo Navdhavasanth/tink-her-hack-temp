@@ -133,12 +133,9 @@ Tools Required:
 
 #### Schematic & Circuit
 
-![Circuit](Add your circuit diagram here)
+![WhatsApp Image 2026-02-28 at 11 00 02 AM](https://github.com/user-attachments/assets/145ea037-0f09-4ed5-be5c-7d2f1f11b562)
+
 *Add caption explaining connections*
-
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
-
 #### Build Photos
 
 ![Team](Add photo of your team here)
